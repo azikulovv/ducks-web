@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import EventsButtonGroup from '~/components/events/EventsButtonGroup.vue'
+
+const categories = [
+  { label: 'Все', value: '' },
+  {
+    label: 'Бильярд',
+    value: 'billiards',
+  },
+  { label: 'Покер', value: 'poker' },
+  { label: 'Дартс', value: 'darts' },
+]
+const selectedCategory = ref<string>('')
+
+const { events, isLoading, error, fetchEvents } = useEventsQuery(selectedCategory)
+
+onMounted(fetchEvents)
+</script>
+
 <template>
   <div class="min-h-screen text-white pb-32">
     <LayoutHeader> Афиша </LayoutHeader>
@@ -34,25 +53,6 @@
     </div> -->
   </div>
 </template>
-
-<script setup lang="ts">
-import EventsButtonGroup from '~/components/events/EventsButtonGroup.vue'
-
-const categories = [
-  { label: 'Все', value: '' },
-  {
-    label: 'Бильярд',
-    value: 'billiards',
-  },
-  { label: 'Покер', value: 'poker' },
-  { label: 'Дартс', value: 'darts' },
-]
-const selectedCategory = ref<string>('')
-
-const { events, isLoading, error, fetchEvents } = useEventsQuery(selectedCategory)
-
-onMounted(fetchEvents)
-</script>
 
 <style>
 .no-scrollbar::-webkit-scrollbar {
