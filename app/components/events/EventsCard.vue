@@ -15,7 +15,7 @@ defineProps<{
     >
       <NuxtImg
         v-if="event.imageUrl"
-        :src="'http://localhost:5001' + event.imageUrl"
+        :src="renderPicture(event.imageUrl)"
         class="w-full h-full object-cover rounded-lg"
       />
 
