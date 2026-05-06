@@ -22,6 +22,7 @@ export function useAuth() {
   const isLoadingUser = useState<boolean>('auth:is-loading-user', () => false)
 
   const isAuthenticated = computed(() => Boolean(token.value))
+  const isAdmin = computed(() => Boolean(user.value?.role === 'admin'))
 
   async function login(payload: LoginPayload) {
     const response = await api.request<LoginResponse, LoginPayload>('/auth/login', {
@@ -84,6 +85,7 @@ export function useAuth() {
   return {
     token,
     user,
+    isAdmin,
     isLoadingUser,
     isAuthenticated,
     login,

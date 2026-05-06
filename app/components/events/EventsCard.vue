@@ -13,12 +13,21 @@ defineProps<{
     <div
       class="w-16 h-16 rounded-2xl bg-[#0F0F0F] flex items-center justify-center text-3xl shadow-inner"
     >
-      <img :src="'event.image'" alt="" class="" />
+      <NuxtImg
+        v-if="event.imageUrl"
+        :src="'http://localhost:5001' + event.imageUrl"
+        class="w-full h-full object-cover rounded-lg"
+      />
+
+      <!-- fallback -->
+      <div v-else class="w-full h-full flex items-center justify-center text-xs text-gray-600">
+        No image
+      </div>
     </div>
 
     <div class="grow">
       <div class="flex justify-between items-start">
-        <h4 class="font-bold text-base leading-tight">{{ event.title }}</h4>
+        <h4 class="font-bold text-base leading-tight">{{ event.address }}</h4>
         <span
           class="text-[10px] bg-(--logo-bg)/10 text-(--logo-bg) px-2 py-0.5 rounded-full font-bold uppercase"
         >

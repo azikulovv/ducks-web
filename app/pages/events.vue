@@ -1,18 +1,31 @@
 <script setup lang="ts">
+import { useEventsApi } from '~/api/events.api'
 import EventsButtonGroup from '~/components/events/EventsButtonGroup.vue'
+import { categories } from '~/constants/categories'
+import type { Event } from '~/types/events'
 
-const categories = [
-  { label: 'Все', value: '' },
-  {
-    label: 'Бильярд',
-    value: 'billiards',
-  },
-  { label: 'Покер', value: 'poker' },
-  { label: 'Дартс', value: 'darts' },
-]
+const { getEvents } = useEventsApi()
+
 const selectedCategory = ref<string>('')
+const events = ref<Event[]>()
+const isLoading = ref<boolean>(true)
+const errorMessage = ref<string>()
 
-const { events, isLoading, error } = useEventsQuery(selectedCategory)
+const fetchEvents = async () => {
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    const response = await getEvents({ gameType: selectedCategory.value })
+    events.value = response.data
+  } catch (error) {
+    errorMessage.value = (error as any).error
+  } finally {
+    isLoading.value = false
+  }
+}
+
+watch(selectedCategory, fetchEvents, { immediate: true })
 </script>
 
 <template>
@@ -31,8 +44,8 @@ const { events, isLoading, error } = useEventsQuery(selectedCategory)
           <div v-for="i in 3" :key="i" class="h-24 rounded-xl bg-(--secondary)/20 animate-pulse" />
         </div>
 
-        <div v-else-if="error" class="text-sm text-(--warning)">
-          {{ error }}
+        <div v-else-if="errorMessage" class="text-sm text-(--warning)">
+          {{ errorMessage }}
         </div>
 
         <div v-else class="space-y-3">
@@ -40,15 +53,6 @@ const { events, isLoading, error } = useEventsQuery(selectedCategory)
         </div>
       </section>
     </div>
-
-    <!--
-    <div class="fixed bottom-24 left-0 right-0 px-6 z-40">
-      <button
-        class="w-full bg-[#E11D48] text-white font-black py-4 rounded-2xl shadow-xl active:scale-95 transition-all uppercase tracking-wider"
-      >
-        Записаться на событие
-      </button>
-    </div> -->
   </div>
 </template>
 

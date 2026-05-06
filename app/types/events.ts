@@ -1,7 +1,8 @@
 export type Event = {
   id: string
-  title: string
-  description: string
+  imageUrl: string
+  imageHash: string
+  address: string
   gameType: string
   startsAt: string
   endsAt: null
@@ -12,7 +13,7 @@ export type Event = {
   createdAt: string
   updatedAt: string
   _count: {
-    registrations: 0
+    registrations: number
   }
 }
 
@@ -24,4 +25,16 @@ export type EventsResponse = {
     limit: number
     pages: number
   }
+}
+
+export type EventResponse = Event
+
+export type UpdateEventParams = { id: Event['id'] }
+
+export type UpdateEventPayload = {
+  address: Event['address']
+  startsAt: Event['startsAt']
+  participantLimit: Event['participantLimit']
+  imageUrl: Event['imageUrl']
+  imageHash: Event['imageHash']
 }
