@@ -18,7 +18,7 @@ const { rating, isLoading, error } = useRatingQuery(activeTab)
   <div class="min-h-screen bg-[#0F0F0F] text-white pb-24 font-sans">
     <LayoutHeader>Рейтинг игроков</LayoutHeader>
 
-    <div class="px-4">
+    <div class="p-4">
       <RatingTabsSegmented v-model="activeTab" :items="tabs" />
 
       <div v-if="isLoading" class="space-y-2 mt-4">

@@ -78,7 +78,7 @@ export function useAuth() {
   function logout() {
     token.value = null
     user.value = null
-    navigateTo('/auth/login')
+    navigateTo('/login')
   }
 
   return {

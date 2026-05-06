@@ -3,7 +3,7 @@ definePageMeta({
   middleware: 'auth',
 })
 
-const { user } = useAuth()
+const { user, logout } = useAuth()
 
 const menu = [
   { label: 'Идеи и предложения', path: '/ideas' },
@@ -35,6 +35,18 @@ const menu = [
         <p class="text-[9px] text-gray-500 font-black uppercase italic">{{ s.label }}</p>
         <p class="text-xl font-black text-[#E11D48]">#{{ s.rank }}</p>
       </div> -->
+      <div class="bg-[#1A1A1A] p-4 rounded-2xl text-center border border-white/5">
+        <p class="text-[9px] text-gray-500 font-black uppercase italic">{{ 's.label' }}</p>
+        <p class="text-xl font-black text-[#E11D48]">#{{ 's.rank' }}</p>
+      </div>
+      <div class="bg-[#1A1A1A] p-4 rounded-2xl text-center border border-white/5">
+        <p class="text-[9px] text-gray-500 font-black uppercase italic">{{ 's.label' }}</p>
+        <p class="text-xl font-black text-[#E11D48]">#{{ 's.rank' }}</p>
+      </div>
+      <div class="bg-[#1A1A1A] p-4 rounded-2xl text-center border border-white/5">
+        <p class="text-[9px] text-gray-500 font-black uppercase italic">{{ 's.label' }}</p>
+        <p class="text-xl font-black text-[#E11D48]">#{{ 's.rank' }}</p>
+      </div>
     </div>
 
     <div class="space-y-3">
@@ -42,11 +54,13 @@ const menu = [
         v-for="btn in menu"
         :key="btn.label"
         @click="navigateTo(btn.path)"
-        class="w-full bg-[#1A1A1A] p-5 rounded-2xl flex justify-between items-center border border-white/5 active:bg-[#222]"
+        class="w-full bg-[#1A1A1A] p-5 rounded-xl flex justify-between items-center border border-white/5 active:bg-[#222]"
       >
-        <span class="font-bold italic uppercase text-sm">{{ btn.label }}</span>
+        <span class="font-bold uppercase text-sm">{{ btn.label }}</span>
         <span class="text-[#E11D48]">→</span>
       </button>
+
+      <BaseButton @click="logout"> Выйти </BaseButton>
     </div>
   </div>
 </template>

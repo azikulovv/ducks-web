@@ -15,6 +15,7 @@ const formData = ref<LoginSchema>({
 
 const isLoading = ref(false)
 
+const notify = useNotify()
 const { errors, validate } = useZodValidation<LoginSchema>(loginSchema)
 const { login } = useAuth()
 
@@ -23,7 +24,14 @@ const submit = async () => {
 
   try {
     isLoading.value = true
-    await login({ email: formData.value.email, password: formData.value.password })
+    await notify.promise(
+      login({ email: formData.value.email, password: formData.value.password }),
+      {
+        loading: 'Входим в аккаунт...',
+        success: 'Вы усепешно вошли в аккаунт!',
+        error: 'Произошла ошибка при входе в аккаунт',
+      },
+    )
     await navigateTo('/events')
   } finally {
     isLoading.value = false

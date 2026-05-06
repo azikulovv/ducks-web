@@ -14,6 +14,7 @@ const form = ref<RegisterSchema>({
 
 const isLoading = ref(false)
 
+const notify = useNotify()
 const { errors, validate } = useZodValidation<RegisterSchema>(registerSchema)
 const { register } = useAuth()
 
@@ -23,12 +24,19 @@ const registerHandler = async () => {
   try {
     isLoading.value = true
 
-    await register({
-      email: form.value.email,
-      name: form.value.name,
-      password: form.value.password,
-    })
-    await navigateTo('/events')
+    await notify.promise(
+      register({
+        email: form.value.email,
+        name: form.value.name,
+        password: form.value.password,
+      }),
+      {
+        loading: 'Создаем аккаунт...',
+        success: 'Аккаунт создан!',
+        error: 'Произошла ошибка при созданий аккаунта',
+      },
+    )
+    await navigateTo('/login')
   } finally {
     isLoading.value = false
   }
