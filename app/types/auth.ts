@@ -29,5 +29,8 @@ export type RegisterResponse = {
 }
 
 export type MeResponse = AuthUser & {
-  ratings: []
+  ratings: {
+    gameType: string
+    points: number
+  }[]
 }

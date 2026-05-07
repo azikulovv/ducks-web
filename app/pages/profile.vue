@@ -27,26 +27,18 @@ const menu = [
     </div>
 
     <div class="grid grid-cols-3 gap-3">
-      <!-- <div
-        v-for="s in user?.ratings"
-        :key="s.label"
-        class="bg-(--secondary)/20 p-4 rounded-2xl text-center border border-white/5"
-      >
-        <p class="text-[9px] text-gray-500 font-black uppercase italic">{{ s.label }}</p>
-        <p class="text-xl font-black text-[#E11D48]">#{{ s.rank }}</p>
-      </div> -->
-      <div class="bg-(--secondary)/20 p-4 rounded-xl text-center border border-white/5">
-        <p class="text-[9px] text-gray-500 font-black uppercase italic">Покер</p>
-        <p class="text-xl font-black text-(--logo-bg)">-</p>
-      </div>
-      <div class="bg-(--secondary)/20 p-4 rounded-xl text-center border border-white/5">
-        <p class="text-[9px] text-gray-500 font-black uppercase italic">Бильярд</p>
-        <p class="text-xl font-black text-(--logo-bg)">-</p>
-      </div>
-      <div class="bg-(--secondary)/20 p-4 rounded-xl text-center border border-white/5">
-        <p class="text-[9px] text-gray-500 font-black uppercase italic">Дартс</p>
-        <p class="text-xl font-black text-(--logo-bg)">-</p>
-      </div>
+      <template v-if="user?.ratings">
+        <div
+          v-for="s in user.ratings"
+          :key="s.gameType"
+          class="bg-(--secondary)/20 p-4 rounded-2xl text-center border border-white/5"
+        >
+          <p class="text-[9px] text-gray-500 font-black uppercase">
+            {{ { poker: 'Покер', billiards: 'Бильярд', darts: 'Дартс' }[s.gameType] }}
+          </p>
+          <p class="text-xl font-black text-(--logo-bg)">{{ s.points }}</p>
+        </div>
+      </template>
     </div>
 
     <div class="space-y-3">
