@@ -10,7 +10,7 @@ const nav = [
   { label: 'Главная', path: '/events', icon: NavHome },
   { label: 'События', path: '/admin/events', icon: NavEvents },
   { label: 'Активные', path: '/admin/active-events', icon: NavEvents },
-  // { label: 'Рейтинг', path: '/admin/rating', icon: NavRating },
+  { label: 'Feedback', path: '/admin/feedback', icon: NavRating },
 ]
 
 const isActive = (path: string) => {
