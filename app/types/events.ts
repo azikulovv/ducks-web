@@ -48,3 +48,10 @@ export type CreateEventPayload = {
   imageUrl: Event['imageUrl']
   imageHash: Event['imageHash']
 }
+
+export type ReorderParticipantsPayload = {
+  participants: {
+    userId: string
+    position: number
+  }[]
+}

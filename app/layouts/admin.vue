@@ -9,7 +9,7 @@ const route = useRoute()
 const nav = [
   { label: 'Главная', path: '/events', icon: NavHome },
   { label: 'События', path: '/admin/events', icon: NavEvents },
-  // { label: 'Юзеры', path: '/admin/users', icon: NavUsers },
+  { label: 'Активные', path: '/admin/active-events', icon: NavEvents },
   // { label: 'Рейтинг', path: '/admin/rating', icon: NavRating },
 ]
 

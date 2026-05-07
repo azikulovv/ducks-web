@@ -2,6 +2,7 @@ import type {
   CreateEventPayload,
   EventResponse,
   EventsResponse,
+  ReorderParticipantsPayload,
   UpdateEventParams,
   UpdateEventPayload,
 } from '~/types/events'
@@ -27,6 +28,19 @@ export function useEventsApi() {
     })
   }
 
+  const getActiveEventsNow = (params?: GetEventsParams) => {
+    return api.request<EventsResponse>('/events/active-now', {
+      method: 'GET',
+      query: params,
+    })
+  }
+
+  const getEventParticipants = (eventId: string) => {
+    return api.request<EventsResponse>(`/events/${eventId}/participants`, {
+      method: 'GET',
+    })
+  }
+
   const getEvent = (id: string) => {
     return api.request<EventResponse>(`/events/${id}`, {
       method: 'GET',
@@ -35,6 +49,13 @@ export function useEventsApi() {
 
   const updateEvent = (params: UpdateEventParams, payload: UpdateEventPayload) => {
     return api.request<EventResponse>(`/events/${params.id}`, {
+      method: 'PATCH',
+      body: payload,
+    })
+  }
+
+  const reorderParticipants = (eventId: string, payload: ReorderParticipantsPayload) => {
+    return api.request(`/events/${eventId}/participants/reorder`, {
       method: 'PATCH',
       body: payload,
     })
@@ -51,6 +72,9 @@ export function useEventsApi() {
     getEvent,
     getEvents,
     getMyEvents,
+    getActiveEventsNow,
+    getEventParticipants,
+    reorderParticipants,
     updateEvent,
     createEvent,
   }
