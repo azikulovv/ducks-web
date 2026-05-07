@@ -8,6 +8,7 @@ const { user, logout, isAdmin } = useAuth()
 const menu = [
   { label: 'Идеи и предложения', path: '/ideas' },
   { label: 'Мои записи', path: '/subscriptions' },
+  { label: 'О клубе', path: '/about' },
   { label: 'Настройки профиля', path: '#' },
 ]
 </script>
