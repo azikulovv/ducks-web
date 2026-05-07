@@ -20,6 +20,13 @@ export function useEventsApi() {
     })
   }
 
+  const getMyEvents = (params?: GetEventsParams) => {
+    return api.request<EventsResponse>('/events/me', {
+      method: 'GET',
+      query: params,
+    })
+  }
+
   const getEvent = (id: string) => {
     return api.request<EventResponse>(`/events/${id}`, {
       method: 'GET',
@@ -43,6 +50,7 @@ export function useEventsApi() {
   return {
     getEvent,
     getEvents,
+    getMyEvents,
     updateEvent,
     createEvent,
   }
