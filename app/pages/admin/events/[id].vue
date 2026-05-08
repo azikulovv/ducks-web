@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { Calendar, Map, Users } from '@lucide/vue'
 import { useEventsApi } from '~/api/events.api'
 import { useUploadApi } from '~/api/upload.api'
-
-import BackButton from '~/components/BackButton.vue'
+import BaseHeader from '~/components/layout/header/BaseHeader.vue'
+import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
+import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+import BaseSelect from '~/components/ui/BaseSelect.vue'
 
 import { categories } from '~/constants/categories'
 
 definePageMeta({
-  layout: false,
+  layout: 'empty',
   middleware: 'admin',
 })
 
@@ -125,223 +128,159 @@ const onFileChange = (e: Event) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-(--bg) text-white">
-    <!-- HEADER -->
-    <div class="sticky top-0 z-20 border-b border-white/5 bg-(--bg)/80 backdrop-blur-xl">
-      <div class="flex items-center justify-between p-4">
-        <BackButton to="/admin/events" label="Назад" />
-      </div>
-    </div>
+  <BaseHeader>
+    <template #left>
+      <HeaderBackButton />
+    </template>
 
-    <!-- LOADING -->
-    <div v-if="isLoading" class="flex items-center justify-center py-20 text-gray-500">
-      Загрузка события...
-    </div>
+    <template #default>
+      <HeaderTitle title="Создание события" />
+    </template>
+  </BaseHeader>
 
-    <!-- CONTENT -->
-    <div v-else class="mx-auto max-w-2xl space-y-6 p-4 pb-28">
-      <!-- IMAGE -->
-      <div>
-        <label class="mb-2 block text-sm text-gray-400"> Обложка </label>
+  <!-- LOADING -->
+  <div v-if="isLoading" class="flex items-center justify-center py-20 text-gray-500">
+    Загрузка события...
+  </div>
 
-        <label
-          class="group relative flex h-56 cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-dashed border-white/10 bg-(--secondary)/10 transition hover:border-(--primary)/40"
+  <!-- CONTENT -->
+  <div v-else class="space-y-6 p-4 pb-10">
+    <!-- IMAGE -->
+    <div>
+      <label class="mb-2 block text-sm text-gray-400"> Обложка </label>
+
+      <label
+        class="group relative flex h-56 cursor-pointer items-center justify-center overflow-hidden rounded-3xl border border-dashed border-white/10 bg-(--secondary)/10 transition hover:border-(--primary)/40"
+      >
+        <img
+          v-if="form.imageUrl"
+          :src="form.imageUrl.startsWith('/') ? renderPicture(form.imageUrl) : form.imageUrl"
+          class="absolute inset-0 h-full w-full object-cover"
+        />
+
+        <div class="absolute inset-0 bg-black/40 opacity-0 transition group-hover:opacity-100" />
+
+        <div
+          v-if="!form.imageUrl"
+          class="relative z-10 flex flex-col items-center gap-3 text-center"
         >
-          <img
-            v-if="form.imageUrl"
-            :src="form.imageUrl.startsWith('/') ? renderPicture(form.imageUrl) : form.imageUrl"
-            class="absolute inset-0 h-full w-full object-cover"
-          />
-
-          <div class="absolute inset-0 bg-black/40 opacity-0 transition group-hover:opacity-100" />
-
           <div
-            v-if="!form.imageUrl"
-            class="relative z-10 flex flex-col items-center gap-3 text-center"
+            class="flex size-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md"
           >
-            <div
-              class="flex size-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md"
+            <!-- IMAGE ICON -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-7 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
             >
-              <!-- IMAGE ICON -->
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="size-7 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M4 16l4-4a2 2 0 012.828 0L14 15l2-2a2 2 0 012.828 0L20 14M7 8h.01M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"
-                />
-              </svg>
-            </div>
-
-            <div>
-              <p class="text-sm font-medium">Загрузить изображение</p>
-
-              <p class="mt-1 text-xs text-gray-400">PNG, JPG, WEBP</p>
-            </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 16l4-4a2 2 0 012.828 0L14 15l2-2a2 2 0 012.828 0L20 14M7 8h.01M4 6a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6z"
+              />
+            </svg>
           </div>
 
-          <!-- EDIT BADGE -->
-          <div
-            v-if="form.imageUrl"
-            class="absolute right-3 bottom-3 rounded-xl bg-black/60 px-3 py-1 text-xs backdrop-blur-md"
-          >
-            Изменить
+          <div>
+            <p class="text-sm font-medium">Загрузить изображение</p>
+
+            <p class="mt-1 text-xs text-gray-400">PNG, JPG, WEBP</p>
           </div>
-
-          <input type="file" accept="image/*" class="hidden" @change="onFileChange" />
-        </label>
-
-        <p v-if="isUploading" class="mt-2 text-xs text-gray-500">Загрузка изображения...</p>
-      </div>
-
-      <!-- CATEGORY -->
-      <div>
-        <label class="mb-2 block text-sm text-gray-400"> Категория </label>
-
-        <div class="grid grid-cols-2 gap-2">
-          <button
-            v-for="category in categories"
-            :key="category.value"
-            type="button"
-            @click="form.gameType = category.value"
-            class="rounded-2xl border px-4 py-3 text-sm transition"
-            :class="
-              form.gameType === category.value
-                ? 'border-(--primary) bg-(--primary)/10 text-(--primary)'
-                : 'border-white/5 bg-(--secondary)/20 text-gray-300 hover:border-white/10'
-            "
-          >
-            {{ category.label }}
-          </button>
         </div>
-      </div>
 
-      <!-- ADDRESS -->
-      <div>
-        <label class="mb-2 block text-sm text-gray-400"> Локация </label>
-
+        <!-- EDIT BADGE -->
         <div
-          class="flex h-14 items-center gap-3 rounded-2xl border border-white/5 bg-(--secondary)/20 px-4 transition focus-within:border-(--primary)/40"
+          v-if="form.imageUrl"
+          class="absolute right-3 bottom-3 rounded-xl bg-black/60 px-3 py-1 text-xs backdrop-blur-md"
         >
-          <!-- MAP ICON -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="size-5 text-gray-500 shrink-0"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="1.8"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 21s-6-4.35-6-10a6 6 0 1112 0c0 5.65-6 10-6 10z"
-            />
-            <circle cx="12" cy="11" r="2.5" />
-          </svg>
-
-          <input
-            v-model="form.address"
-            placeholder="Адрес мероприятия"
-            class="h-full w-full bg-transparent outline-none"
-          />
+          Изменить
         </div>
-      </div>
 
-      <!-- DATE -->
-      <div>
-        <label class="mb-2 block text-sm text-gray-400"> Дата и время </label>
+        <input type="file" accept="image/*" class="hidden" @change="onFileChange" />
+      </label>
 
-        <div
-          class="flex h-14 items-center gap-3 rounded-2xl border border-white/5 bg-(--secondary)/20 px-4 transition focus-within:border-(--primary)/40"
-        >
-          <!-- CALENDAR ICON -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="size-5 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="1.8"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8 3v2M16 3v2M4 9h16M5 5h14a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z"
-            />
-          </svg>
+      <p v-if="isUploading" class="mt-2 text-xs text-gray-500">Загрузка изображения...</p>
+    </div>
 
-          <input
-            v-model="form.startsAt"
-            type="datetime-local"
-            class="h-full w-full bg-transparent outline-none"
-          />
-        </div>
-      </div>
+    <!-- CATEGORY -->
+    <div>
+      <label class="mb-2 block text-sm text-gray-400"> Категория </label>
 
-      <!-- PARTICIPANTS -->
-      <div>
-        <label class="mb-2 block text-sm text-gray-400"> Лимит участников </label>
+      <BaseSelect v-model="form.gameType" :options="categories" />
+    </div>
 
-        <div
-          class="flex h-14 items-center gap-3 rounded-2xl border border-white/5 bg-(--secondary)/20 px-4 transition focus-within:border-(--primary)/40"
-        >
-          <!-- USERS ICON -->
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="size-5 text-gray-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="1.8"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2"
-            />
-            <circle cx="9" cy="7" r="3" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M23 21v-2a4 4 0 00-3-3.87" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 3.13a4 4 0 010 7.75" />
-          </svg>
+    <!-- ADDRESS -->
+    <div>
+      <label class="mb-2 block text-sm text-gray-400"> Локация </label>
 
-          <input
-            v-model.number="form.participantLimit"
-            type="number"
-            min="1"
-            placeholder="Количество мест"
-            class="h-full w-full bg-transparent outline-none"
-          />
-        </div>
-      </div>
-
-      <!-- ERROR -->
       <div
-        v-if="errorMessage"
-        class="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400"
+        class="flex h-11.5 items-center gap-3 rounded-2xl border border-white/5 bg-(--secondary)/20 px-4 transition focus-within:border-(--primary)/40"
       >
-        {{ errorMessage }}
+        <Map :size="20" class="text-gray-500 shrink-0" />
+
+        <input
+          v-model="form.address"
+          placeholder="Адрес мероприятия"
+          class="h-full w-full bg-transparent outline-none text-sm"
+        />
       </div>
     </div>
 
-    <!-- MOBILE BUTTON -->
-    <div
-      class="fixed inset-x-0 bottom-0 z-30 border-t border-white/5 bg-(--bg)/80 p-4 backdrop-blur-xl md:hidden"
-    >
-      <BaseButton
-        class="w-full"
-        :disabled="isSaving || isUploading"
-        :loading="isSaving || isUploading"
-        @click="updateEvent"
+    <!-- DATE -->
+    <div>
+      <label class="mb-2 block text-sm text-gray-400"> Дата и время </label>
+
+      <div
+        class="flex h-11.5 items-center gap-3 rounded-2xl border border-white/5 bg-(--secondary)/20 px-4 transition focus-within:border-(--primary)/40"
       >
-        Сохранить изменения
-      </BaseButton>
+        <Calendar :size="20" class="text-gray-500 shrink-0" />
+
+        <input
+          v-model="form.startsAt"
+          type="datetime-local"
+          class="h-full w-full bg-transparent outline-none text-sm"
+        />
+      </div>
     </div>
+
+    <!-- PARTICIPANTS -->
+    <div>
+      <label class="mb-2 block text-sm text-gray-400"> Лимит участников </label>
+
+      <div
+        class="flex h-11.5 items-center gap-3 rounded-2xl border border-white/5 bg-(--secondary)/20 px-4 transition focus-within:border-(--primary)/40"
+      >
+        <Users :size="20" class="text-gray-500 shrink-0" />
+
+        <input
+          v-model.number="form.participantLimit"
+          type="text"
+          inputmode="numeric"
+          min="1"
+          placeholder="Количество мест"
+          class="h-full w-full bg-transparent outline-none text-sm"
+        />
+      </div>
+    </div>
+
+    <!-- ERROR -->
+    <div
+      v-if="errorMessage"
+      class="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400"
+    >
+      {{ errorMessage }}
+    </div>
+
+    <BaseButton
+      class="w-full"
+      :disabled="isSaving || isUploading"
+      :loading="isSaving || isUploading"
+      @click="updateEvent"
+    >
+      Сохранить изменения
+    </BaseButton>
   </div>
 </template>

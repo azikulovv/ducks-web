@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { CalendarFold } from '@lucide/vue'
 import { useEventsApi } from '~/api/events.api'
+import BaseHeader from '~/components/layout/header/BaseHeader.vue'
+import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
+import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+import BaseSelect from '~/components/ui/BaseSelect.vue'
+import { statuses } from '~/constants/categories'
 
 definePageMeta({
-  layout: false,
+  layout: 'empty',
   middleware: 'auth',
 })
 
@@ -12,12 +18,13 @@ const { getMyEvents } = useEventsApi()
 
 const events = ref<any[]>([])
 const isLoading = ref(true)
+const selectedStatus = ref('')
 
 const loadEvents = async () => {
   isLoading.value = true
 
   try {
-    const res = await getMyEvents()
+    const res = await getMyEvents({ status: selectedStatus.value })
     events.value = res.data
   } catch (e) {
     console.error(e)
@@ -26,50 +33,34 @@ const loadEvents = async () => {
   }
 }
 
-onMounted(loadEvents)
-
-/**
- * Open event
- */
-const openEvent = (id: string) => {
-  router.push(`/events/${id}`)
-}
+watch(selectedStatus, loadEvents, { immediate: true })
 </script>
 
 <template>
-  <div class="min-h-screen bg-(--bg) text-white">
-    <!-- HEADER -->
-    <div class="sticky top-0 z-20 border-b border-white/5 bg-(--bg)/80 backdrop-blur-xl">
-      <div class="flex items-center justify-between p-4">
-        <BackButton to="/profile" label="Назад" />
-      </div>
-    </div>
+  <BaseHeader>
+    <template #left>
+      <HeaderBackButton />
+    </template>
 
-    <!-- LOADING -->
-    <div v-if="isLoading" class="space-y-4 p-4">
+    <template #default>
+      <HeaderTitle title="Мои записи" />
+    </template>
+  </BaseHeader>
+
+  <div class="p-4 space-y-4">
+    <BaseSelect v-model="selectedStatus" :options="statuses" />
+
+    <div v-if="isLoading" class="space-y-4">
       <div v-for="i in 4" :key="i" class="h-40 animate-pulse rounded-3xl bg-(--secondary)/20" />
     </div>
 
     <!-- EMPTY -->
     <div
       v-else-if="!events.length"
-      class="flex flex-col items-center justify-center px-6 py-24 text-center"
+      class="flex flex-col items-center justify-center py-24 text-center"
     >
       <div class="mb-6 flex size-20 items-center justify-center rounded-full bg-(--secondary)/20">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="size-10 text-gray-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="1.8"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M8 3v2M16 3v2M4 9h16M5 5h14a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z"
-          />
-        </svg>
+        <CalendarFold :size="40" class="text-gray-500" />
       </div>
 
       <h2 class="text-lg font-semibold">Пока нет событий</h2>
@@ -85,7 +76,8 @@ const openEvent = (id: string) => {
     </div>
 
     <!-- LIST -->
-    <div v-else class="space-y-4 p-4 pb-28">
+
+    <div v-else class="space-y-4">
       <EventsCard v-for="event in events" :key="event.id" :event="event" />
     </div>
   </div>

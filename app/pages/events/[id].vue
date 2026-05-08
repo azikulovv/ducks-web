@@ -2,6 +2,14 @@
 import { useEventsApi } from '~/api/events.api'
 import { useEventRegistrationApi } from '~/api/event-registration.api'
 import type { Event } from '~/types/events'
+import BaseHeader from '~/components/layout/header/BaseHeader.vue'
+import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
+import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+
+definePageMeta({
+  layout: 'empty',
+  middleware: 'auth',
+})
 
 const route = useRoute()
 const eventId = computed(() => route.params.id as string)
@@ -12,13 +20,9 @@ const event = ref<Event>()
 const isLoadingEvent = ref(false)
 const error = ref<string | null>(null)
 
-// registration
 const { isRegistered, register, unregister, fetchStatus, isLoading } =
   useEventRegistrationApi(eventId)
 
-// =========================
-// LOAD EVENT
-// =========================
 const fetchEvent = async () => {
   try {
     isLoadingEvent.value = true
@@ -38,76 +42,108 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-(--bg) text-white">
-    <!-- HEADER -->
-    <div class="sticky top-0 z-20 border-b border-white/5 bg-(--bg)/80 backdrop-blur-xl">
-      <div class="flex items-center justify-between p-4">
-        <BackButton to="/events" label="Назад" />
-      </div>
+  <BaseHeader>
+    <template #left>
+      <HeaderBackButton />
+    </template>
+
+    <template #default>
+      <HeaderTitle title="Событие" />
+    </template>
+  </BaseHeader>
+
+  <div class="p-4 pb-24 space-y-5">
+    <!-- LOADING -->
+    <div v-if="isLoadingEvent" class="space-y-3 animate-pulse">
+      <div class="h-44 rounded-2xl bg-white/5" />
+      <div class="h-4 w-2/3 rounded bg-white/5" />
+      <div class="h-4 w-1/2 rounded bg-white/5" />
     </div>
 
-    <div class="p-4 pb-24">
-      <!-- LOADING -->
-      <div v-if="isLoadingEvent" class="animate-pulse space-y-4">
-        <div class="h-40 bg-[#1A1A1A] rounded-2xl" />
-        <div class="h-4 bg-[#1A1A1A] rounded w-2/3" />
-        <div class="h-4 bg-[#1A1A1A] rounded w-1/2" />
+    <div
+      v-else-if="error"
+      class="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400"
+    >
+      {{ error }}
+    </div>
+
+    <div v-else-if="event" class="space-y-5">
+      <div class="relative overflow-hidden rounded-3xl border border-white/5 bg-(--secondary)/20">
+        <NuxtImg
+          v-if="event.imageUrl"
+          :src="renderPicture(event.imageUrl)"
+          class="h-52 w-full object-cover"
+        />
+
+        <div v-else class="h-52 flex items-center justify-center text-gray-600">
+          Нет изображения
+        </div>
+
+        <div
+          class="absolute top-3 right-3 rounded-full border px-3 py-1 text-[10px] font-bold tracking-widest"
+          :class="
+            event.status === 'published'
+              ? 'bg-(--logo-bg)/10 text-(--logo-bg) border-(--logo-bg)/20'
+              : event.status === 'completed'
+                ? 'bg-white/5 text-gray-400 border-white/10'
+                : 'bg-red-500/10 text-red-400 border-red-500/20'
+          "
+        >
+          {{ getStatusLabel(event.status) }}
+        </div>
       </div>
 
-      <!-- ERROR -->
-      <div v-else-if="error" class="text-red-400 text-sm">
-        {{ error }}
+      <!-- TITLE CARD -->
+      <div class="rounded-3xl border border-white/5 bg-(--secondary)/20 p-5">
+        <h1 class="text-lg font-black uppercase tracking-tight">
+          {{ event.address }}
+        </h1>
+
+        <p class="mt-2 text-xs text-gray-500 uppercase tracking-widest">
+          {{ getGameLabel(event.gameType) }}
+        </p>
       </div>
 
-      <!-- CONTENT -->
-      <div v-else-if="event" class="space-y-5">
-        <!-- IMAGE -->
-        <div class="rounded-2xl overflow-hidden bg-[#1A1A1A]">
-          <img
-            v-if="event.imageUrl"
-            :src="renderPicture(event.imageUrl)"
-            class="w-full h-48 object-cover"
-          />
-          <div v-else class="h-48 flex items-center justify-center text-gray-600">
-            Нет изображения
-          </div>
+      <!-- INFO GRID -->
+      <div class="grid grid-cols-2 gap-3">
+        <div class="rounded-2xl border border-white/5 bg-(--secondary)/20 p-4">
+          <p class="text-[10px] text-gray-500 uppercase tracking-widest">Дата</p>
+          <p class="mt-1 text-sm font-bold">
+            {{ formatDate(event.startsAt, { dateStyle: 'medium', timeStyle: 'short' }) }}
+          </p>
         </div>
 
-        <div>
-          <h1 class="text-xl font-black uppercase tracking-tight">
-            {{ event.address }}
-          </h1>
+        <div class="rounded-2xl border border-white/5 bg-(--secondary)/20 p-4">
+          <p class="text-[10px] text-gray-500 uppercase tracking-widest">Участники</p>
+          <p class="mt-1 text-sm font-bold">
+            {{ event._count?.registrations }} / {{ event.participantLimit }}
+          </p>
         </div>
+      </div>
 
-        <!-- META -->
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <div class="bg-[#1A1A1A] p-3 rounded-xl">
-            <p class="text-gray-500">Дата</p>
-            <p class="font-bold">
-              {{ formatDate(event.startsAt, { dateStyle: 'medium', timeStyle: 'short' }) }}
-            </p>
-          </div>
+      <!-- CTA -->
+      <div v-if="event.status === 'published'" class="pt-2">
+        <BaseButton v-if="!isRegistered" :disabled="isLoading" class="w-full" @click="register">
+          Записаться
+        </BaseButton>
 
-          <div class="bg-[#1A1A1A] p-3 rounded-xl">
-            <p class="text-gray-500">Участники</p>
-            <p class="font-bold">
-              {{ event._count?.registrations }} / {{ event.participantLimit }}
-            </p>
-          </div>
-        </div>
+        <BaseButton
+          v-else
+          variant="secondary"
+          :disabled="isLoading"
+          class="w-full"
+          @click="unregister"
+        >
+          Отписаться
+        </BaseButton>
+      </div>
 
-        <!-- ACTION -->
-        <div class="pt-2" v-if="event.status === 'published'">
-          <BaseButton v-if="!isRegistered" :disabled="isLoading" @click="register">
-            Записаться
-          </BaseButton>
-
-          <BaseButton v-else :disabled="isLoading" variant="secondary" @click="unregister">
-            Отписаться
-          </BaseButton>
-        </div>
-
-        <div v-else class="text-red-400 text-sm">Событие завершено!</div>
+      <!-- FINISHED STATE -->
+      <div
+        v-else
+        class="rounded-2xl border border-white/5 bg-white/5 p-4 text-center text-sm text-gray-400"
+      >
+        Событие недоступно
       </div>
     </div>
   </div>

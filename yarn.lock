@@ -428,6 +428,11 @@
   resolved "https://registry.npmjs.org/@kwsites/promise-deferred/-/promise-deferred-1.1.1.tgz"
   integrity sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==
 
+"@lucide/vue@^1.14.0":
+  version "1.14.0"
+  resolved "https://registry.npmjs.org/@lucide/vue/-/vue-1.14.0.tgz"
+  integrity sha512-0s2fsXJGXYqcuyigsRtoTPqbeGGFOiLTYMDFfYvWO4rQNOongaJe1XDiExOLiybbI9+uQPBr5aGoiCdQNlSfQg==
+
 "@mapbox/node-pre-gyp@^2.0.0":
   version "2.0.3"
   resolved "https://registry.npmjs.org/@mapbox/node-pre-gyp/-/node-pre-gyp-2.0.3.tgz"
@@ -4667,7 +4672,7 @@ vue-router@^5.0.6:
     unplugin-utils "^0.3.1"
     yaml "^2.8.2"
 
-"vue@^2.7.0 || ^3.2.25", vue@^3.0.0, vue@^3.2.25, vue@^3.3.4, vue@^3.5.0, vue@^3.5.33, vue@>=3, vue@>=3.5.18, vue@3.5.33:
+"vue@^2.7.0 || ^3.2.25", vue@^3.0.0, vue@^3.2.25, vue@^3.3.4, vue@^3.5.0, vue@^3.5.33, vue@>=3, vue@>=3.0.1, vue@>=3.5.18, vue@3.5.33:
   version "3.5.33"
   resolved "https://registry.npmjs.org/vue/-/vue-3.5.33.tgz"
   integrity sha512-1AgChhx5w3ALgT4oK3acm2Es/7jyZhWSVUfs3rOBlGQC0rjEDkS7G4lWlJJGGNQD+BV3reCwbQrOe1mPNwKHBQ==

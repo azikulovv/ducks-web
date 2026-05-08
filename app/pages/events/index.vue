@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useEventsApi } from '~/api/events.api'
-import EventsButtonGroup from '~/components/events/EventsButtonGroup.vue'
 import { categories } from '~/constants/categories'
 import type { Event } from '~/types/events'
+
+import BaseHeader from '~/components/layout/header/BaseHeader.vue'
+import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+import BaseSelect from '~/components/ui/BaseSelect.vue'
 
 definePageMeta({
   middleware: 'auth',
@@ -33,11 +36,15 @@ watch(selectedCategory, fetchEvents, { immediate: true })
 </script>
 
 <template>
-  <div class="min-h-screen text-white pb-32">
-    <LayoutHeader> Афиша </LayoutHeader>
+  <div class="text-white pb-32">
+    <BaseHeader>
+      <template #default>
+        <HeaderTitle title="Афиша" />
+      </template>
+    </BaseHeader>
 
     <div class="p-4 space-y-6">
-      <EventsButtonGroup v-model="selectedCategory" :list="categories" />
+      <BaseSelect v-model="selectedCategory" :options="categories" />
 
       <section>
         <h3 class="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] mb-4 ml-2">

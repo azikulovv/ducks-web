@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import BaseHeader from '~/components/layout/header/BaseHeader.vue'
+import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
+import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+
 const faq = [
   {
     question: 'Как записаться на событие?',
@@ -47,11 +51,17 @@ const faq = [
 </script>
 
 <template>
-  <div class="min-h-screen bg-(--bg) text-white pb-24">
-    <LayoutHeader>FAQ</LayoutHeader>
+  <BaseHeader>
+    <template #left>
+      <HeaderBackButton />
+    </template>
 
-    <div class="p-4 space-y-3">
-      <FaqItem v-for="(item, i) in faq" :key="i" :faq="item" />
-    </div>
+    <template #default>
+      <HeaderTitle title="FAQ" />
+    </template>
+  </BaseHeader>
+
+  <div class="p-4 space-y-3">
+    <FaqItem v-for="(item, i) in faq" :key="i" :faq="item" />
   </div>
 </template>

@@ -13,8 +13,6 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
 
-const container = ref<HTMLElement | null>(null)
-
 const activeIndex = computed(() => props.items.findIndex((i) => i.value === props.modelValue))
 
 const setActive = (value: string) => {
@@ -24,23 +22,27 @@ const setActive = (value: string) => {
 
 <template>
   <div
-    ref="container"
-    class="relative bg-(--secondary)/20 p-1 rounded-2xl flex border border-white/5 overflow-hidden"
+    class="relative grid overflow-hidden rounded-2xl border border-white/5 bg-white/3 p-1 backdrop-blur-xl"
+    :style="{
+      gridTemplateColumns: `repeat(${items.length}, 1fr)`,
+    }"
   >
-    <!-- sliding indicator -->
+    <!-- индикатор активной вкладки -->
     <div
-      class="absolute top-1 bottom-1 left-1 w-[33.333333333333336%] rounded-xl bg-(--logo-bg) shadow-lg transition-transform duration-300 ease-out"
+      class="absolute top-1 bottom-1 left-1 rounded-xl bg-white/5 transition-transform duration-300 ease-out"
       :style="{
+        width: `calc((100% - 8px) / ${items.length})`,
         transform: `translateX(${activeIndex * 100}%)`,
       }"
     />
 
+    <!-- табы -->
     <button
       v-for="item in items"
       :key="item.value"
       @click="setActive(item.value)"
-      class="relative z-10 flex-1 py-3 rounded-xl font-black text-xs uppercase transition-colors"
-      :class="modelValue === item.value ? 'text-white' : 'text-gray-500'"
+      class="relative z-10 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors active:scale-95"
+      :class="modelValue === item.value ? 'text-white' : 'text-gray-500 hover:text-gray-300'"
     >
       {{ item.label }}
     </button>

@@ -7,7 +7,7 @@ export const categories = [
 
 export const statuses = [
   { label: 'Все', value: '' },
-  { label: 'Публикованные', value: 'published' },
+  { label: 'Доступные', value: 'published' },
   { label: 'Завершенные', value: 'completed' },
   { label: 'Отмененные', value: 'cancelled' },
   { label: 'Черновые', value: 'draft' },

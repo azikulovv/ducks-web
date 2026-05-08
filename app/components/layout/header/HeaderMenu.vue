@@ -48,7 +48,7 @@ onMounted(() => {
     >
       <div
         v-if="isOpen"
-        class="absolute top-11 right-0 w-52 overflow-hidden rounded-2xl border border-white/5 bg-[#111111]/95 p-1 shadow-[0_10px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
+        class="absolute top-11 right-0 w-52 overflow-hidden rounded-2xl border border-white/5 bg-[#14151c] p-1 shadow-[0_10px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl"
       >
         <slot />
       </div>

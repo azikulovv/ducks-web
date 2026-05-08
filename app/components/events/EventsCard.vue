@@ -1,55 +1,64 @@
 <script lang="ts" setup>
+import { Calendar } from '@lucide/vue'
 import type { Event } from '~/types/events'
 
-defineProps<{
+const props = defineProps<{
   event: Event
 }>()
+
+const statusConfig = computed(() => {
+  const status = props.event.status
+
+  return statusMap[status] ?? statusMap.draft
+})
 </script>
 
 <template>
   <div
-    aria-label="button"
+    class="relative flex gap-4 rounded-2xl border border-white/5 bg-(--secondary)/20 p-4 transition-all duration-300 hover:bg-white/5 hover:border-white/10 active:scale-[0.99] cursor-pointer"
     @click="navigateTo(`/events/${event.id}`)"
-    class="bg-(--secondary)/20 border border-white/5 p-4 rounded-xl flex items-center gap-4 active:scale-[0.98] transition-transform select-none cursor-pointer"
   >
     <div
-      class="w-16 h-16 rounded-2xl bg-(--secondary)/20 flex items-center justify-center text-3xl shadow-inner"
+      class="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-white/5 bg-black/20"
     >
       <NuxtImg
         v-if="event.imageUrl"
         :src="renderPicture(event.imageUrl)"
-        class="w-full h-full object-cover rounded-lg"
+        class="h-full w-full object-cover"
       />
 
-      <!-- fallback -->
-      <div v-else class="w-full h-full flex items-center justify-center text-xs text-gray-600">
-        No image
-      </div>
+      <div v-else class="text-[10px] text-gray-600">NO IMAGE</div>
     </div>
 
-    <div class="grow">
-      <div class="flex justify-between items-start">
-        <h4 class="font-bold text-base leading-tight">{{ event.address }}</h4>
+    <div class="min-w-0 flex-1">
+      <div class="flex items-start justify-between gap-3">
+        <h4 class="truncate text-sm font-bold text-white">
+          {{ event.address }}
+        </h4>
+
         <span
-          class="text-[10px] bg-(--logo-bg)/10 text-(--logo-bg) px-2 py-0.5 rounded-full font-bold uppercase"
+          class="shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold tracking-widest"
+          :class="statusConfig?.class"
         >
-          {{ event.gameType }}
+          {{ statusConfig?.label }}
         </span>
       </div>
 
-      <div class="flex items-center gap-3 mt-2 text-xs text-gray-500 font-medium">
+      <div class="mt-2 flex items-center gap-3 text-[11px] text-gray-500">
         <span class="flex items-center gap-1">
-          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
+          <Calendar :size="12" />
           {{
             formatDate(event.createdAt, {
               dateStyle: 'medium',
               timeStyle: 'short',
             })
           }}
+        </span>
+
+        <span class="text-gray-700">•</span>
+
+        <span class="text-[10px] font-medium tracking-widest text-(--logo-bg)">
+          {{ getGameLabel(event.gameType) }}
         </span>
       </div>
     </div>

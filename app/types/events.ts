@@ -1,3 +1,7 @@
+import type { AuthUser } from './auth'
+
+export type EventStatus = keyof typeof statusMap
+
 export type Event = {
   id: string
   imageUrl: string
@@ -9,7 +13,7 @@ export type Event = {
   location: string
   participantLimit: number
   pointsForParticipation: number
-  status: string
+  status: EventStatus
   createdAt: string
   updatedAt: string
   _count: {
@@ -61,6 +65,17 @@ export type FinalizeEventResponse = {
 }
 
 export type GetEventParticipantsResponse = {
-  participants: {}
   event: Event
+  participants: Participant[]
+}
+
+export type Participant = {
+  id: string
+  userId: string
+  eventId: string
+  status: EventStatus
+  createdAt: string
+  cancelledAt: string
+  position: number | null
+  user: AuthUser
 }
