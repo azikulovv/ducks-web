@@ -1,11 +1,11 @@
 export default defineNuxtRouteMiddleware(async () => {
-  const auth = useAuth()
+  const auth = useAuthStore()
 
-  if (!auth.token.value) {
+  if (!auth.token) {
     return navigateTo('/login')
   }
 
-  if (!auth.user.value) {
+  if (!auth.user) {
     try {
       await auth.fetchMe()
     } catch {
@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware(async () => {
     }
   }
 
-  if (!auth.isAdmin.value) {
+  if (!auth.isAdmin) {
     return navigateTo('/events')
   }
 })

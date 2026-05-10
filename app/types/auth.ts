@@ -14,6 +14,10 @@ export type LoginPayload = {
   password: string
 }
 
+export type LoginViaTelegramPayload = {
+  initData: string
+}
+
 export type LoginResponse = {
   token: string
   user: AuthUser
@@ -35,4 +39,12 @@ export type MeResponse = AuthUser & {
     gameType: string
     points: number
   }[]
+}
+
+export type TelegramAuthResponse = {
+  token: string
+}
+
+export type TelegramAuthPaylaod = {
+  initData: string
 }

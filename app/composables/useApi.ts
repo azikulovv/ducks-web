@@ -24,7 +24,7 @@ function buildUrl(baseUrl: string, path: string, query?: Record<string, QueryVal
 
 export function useApi() {
   const config = useRuntimeConfig()
-  const token = useCookie<string | null>('access_token')
+  const auth = useAuthStore()
 
   async function request<TResponse, TBody = unknown>(
     path: string,
@@ -37,8 +37,10 @@ export function useApi() {
       body: options.body,
       timeout: 10000,
       headers: {
-        ...(options.auth !== false && token.value
-          ? { Authorization: `Bearer ${token.value}` }
+        ...(options.auth !== false && auth.token
+          ? {
+              Authorization: `Bearer ${auth.token}`,
+            }
           : {}),
       },
     })

@@ -5,7 +5,10 @@ import Apple from '~/components/icons/Apple.vue'
 import Google from '~/components/icons/Google.vue'
 import Telegram from '~/components/icons/Telegram.vue'
 
-definePageMeta({ layout: false, middleware: 'guest' })
+definePageMeta({
+  layout: false,
+  middleware: 'guest',
+})
 
 const formData = ref<LoginSchema>({
   email: '',
@@ -17,7 +20,7 @@ const isLoading = ref(false)
 
 const notify = useNotify()
 const { errors, validate } = useZodValidation<LoginSchema>(loginSchema)
-const { login } = useAuth()
+const { login, loginViaTelegram } = useAuthStore()
 
 const submit = async () => {
   if (!validate(formData.value)) return
@@ -40,6 +43,22 @@ const submit = async () => {
 
 const authSocial = () => {
   alert('Скоро...')
+}
+
+const authByTelegram = async () => {
+  try {
+    isLoading.value = true
+    await notify.promise(loginViaTelegram(), {
+      loading: 'Входим в аккаунт...',
+      success: 'Вы усепешно вошли в аккаунт!',
+      error: 'Произошла ошибка при входе в аккаунт',
+    })
+    console.log('Before navigate')
+    await navigateTo('/events')
+    console.log('After navigate')
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
@@ -110,7 +129,8 @@ const authSocial = () => {
 
       <div class="flex justify-center gap-4">
         <button
-          @click="authSocial"
+          @click="authByTelegram"
+          type="button"
           class="w-14 h-14 bg-(--secondary)/20 border border-white/5 rounded-2xl flex items-center justify-center active:scale-90 transition"
         >
           <Telegram class="w-6 h-6" />

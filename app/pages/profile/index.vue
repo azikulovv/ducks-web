@@ -6,7 +6,7 @@ definePageMeta({
   middleware: 'auth',
 })
 
-const { user, logout, isAdmin } = useAuth()
+const { user, logout, isAdmin } = useAuthStore()
 const router = useRouter()
 
 const menu = [

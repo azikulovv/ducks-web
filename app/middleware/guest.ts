@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware(() => {
-  const token = useCookie<string | null>('access_token')
+  const { token } = useAuthStore()
 
-  if (token.value) {
+  if (token) {
     return navigateTo('/events')
   }
 })

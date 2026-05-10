@@ -5,7 +5,7 @@ const props = defineProps<{
   rating: Rating[]
 }>()
 
-const { user } = useAuth()
+const { user } = useAuthStore()
 
 const isMe = (id: string) => id === user.value?.id
 

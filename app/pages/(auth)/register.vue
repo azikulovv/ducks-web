@@ -16,7 +16,7 @@ const isLoading = ref(false)
 
 const notify = useNotify()
 const { errors, validate } = useZodValidation<RegisterSchema>(registerSchema)
-const { register } = useAuth()
+const { register } = useAuthStore()
 
 const registerHandler = async () => {
   if (!validate(form.value)) return

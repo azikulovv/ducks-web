@@ -6,16 +6,28 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxt/image'],
+  modules: ['@nuxt/image', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
   typescript: {
     strict: true,
   },
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: true,
+    },
   },
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.API_URL,
+    },
+  },
+  app: {
+    head: {
+      script: [
+        {
+          src: 'https://telegram.org/js/telegram-web-app.js',
+        },
+      ],
     },
   },
 })
