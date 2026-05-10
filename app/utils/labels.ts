@@ -4,6 +4,8 @@ export const getGameLabel = (type: string) => {
       poker: 'Покер',
       billiards: 'Бильярд',
       darts: 'Дартс',
+      quiz: 'Квиз',
+      mafia: 'Мафия',
     }[type] ?? type
   )
 }
@@ -37,5 +39,3 @@ export const statusMap = {
     class: 'bg-white/5 text-gray-400 border-white/10',
   },
 }
-
-

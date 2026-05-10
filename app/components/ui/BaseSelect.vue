@@ -61,7 +61,7 @@ const selectItem = (item: Item) => {
           class="flex w-full items-center rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-all"
           :class="
             item.value === modelValue
-              ? 'text-red-400 bg-red-500/10'
+              ? 'bg-red-500/15 text-red-300 '
               : 'text-gray-400 hover:bg-white/5 hover:text-white'
           "
           @click="selectItem(item)"
