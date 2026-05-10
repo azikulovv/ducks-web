@@ -5,6 +5,7 @@ import type { Event } from '~/types/events'
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+import { gameTypeColors } from '~/constants/categories'
 
 definePageMeta({
   layout: 'empty',
@@ -81,13 +82,7 @@ onMounted(async () => {
 
         <div
           class="absolute top-3 right-3 rounded-full border px-3 py-1 text-[10px] font-bold tracking-widest"
-          :class="
-            event.status === 'published'
-              ? 'bg-(--logo-bg)/10 text-(--logo-bg) border-(--logo-bg)/20'
-              : event.status === 'completed'
-                ? 'bg-white/5 text-gray-400 border-white/10'
-                : 'bg-red-500/10 text-red-400 border-red-500/20'
-          "
+          :class="statusMap[event.status].class ?? statusMap.draft.class"
         >
           {{ getStatusLabel(event.status) }}
         </div>
@@ -99,9 +94,12 @@ onMounted(async () => {
           {{ event.address }}
         </h1>
 
-        <p class="mt-2 text-xs text-gray-500 uppercase tracking-widest">
+        <span
+          class="rounded-full px-2.5 py-1 text-[10px] font-medium tracking-widest backdrop-blur-sm"
+          :class="gameTypeColors[event.gameType]"
+        >
           {{ getGameLabel(event.gameType) }}
-        </p>
+        </span>
       </div>
 
       <!-- INFO GRID -->
