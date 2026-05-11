@@ -92,7 +92,7 @@ const goToEvents = () => {
 
     <!-- CTA -->
     <div
-      class="rounded-3xl border border-white/5 bg-gradient-to-br from-white/10 to-white/5 p-6 text-center"
+      class="rounded-3xl border border-white/5 bg-linear-to-br from-white/10 to-white/5 p-6 text-center"
     >
       <h3 class="text-lg font-semibold">Хочешь участвовать?</h3>
       <p class="mt-2 text-sm text-gray-400">Присоединяйся к ближайшим событиям</p>
@@ -103,17 +103,19 @@ const goToEvents = () => {
     </div>
 
     <!-- FRANCHISE -->
-    <div class="rounded-3xl border border-(--logo-bg)/10 bg-(--logo-bg)/5 p-6">
+    <div
+      class="rounded-3xl border border-green-500/10 bg-linear-to-br from-green-500/10 via-(--logo-bg)/5 to-transparent p-6 transition-all duration-300 hover:border-green-500/20"
+    >
       <div class="flex items-center gap-3">
         <div
-          class="size-12 rounded-2xl bg-(--logo-bg)/10 flex items-center justify-center text-(--logo-bg)"
+          class="flex size-12 items-center justify-center rounded-2xl bg-green-500/10 text-green-400"
         >
           <MapPinPlus :size="24" />
         </div>
 
         <div>
-          <h3 class="text-base font-semibold">Франшиза DUCK'S</h3>
-          <p class="text-xs text-gray-500">Открой игровой клуб</p>
+          <h3 class="text-base font-semibold text-white">Франшиза DUCK'S</h3>
+          <p class="text-xs text-gray-400">Открой игровой клуб</p>
         </div>
       </div>
 
@@ -121,7 +123,12 @@ const goToEvents = () => {
         Мы помогаем запускать игровые пространства и турниры.
       </p>
 
-      <BaseButton class="mt-5 w-full"> Стать партнером </BaseButton>
+      <BaseButton
+        @click="navigateTo('/profile/franchise')"
+        class="mt-5 w-full bg-green-500! text-black! hover:bg-green-400! transition-all shadow-lg shadow-green-500/20 hover:shadow-green-500/30"
+      >
+        Стать партнером
+      </BaseButton>
     </div>
   </div>
 </template>
