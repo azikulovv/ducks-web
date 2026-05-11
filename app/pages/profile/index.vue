@@ -13,13 +13,17 @@ const menu = [
   { label: 'Идеи и предложения', path: '/profile/feedback' },
   { label: 'Мои записи', path: '/profile/events' },
   { label: 'О клубе', path: '/profile/about' },
-  // { label: 'Настройки профиля', path: '/profile/settings' },
+  { label: 'Настройки профиля', path: '/profile/settings' },
 ]
 
 const go = (path: string) => {
   if (!path || path === '#') return
   router.push(path)
 }
+
+onMounted(async () => {
+  await useAuthStore().fetchMe()
+})
 </script>
 
 <template>
