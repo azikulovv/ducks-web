@@ -5,6 +5,7 @@ import type {
   RegisterResponse,
   MeResponse,
   LoginViaTelegramPayload,
+  UpdateProfilePayload,
 } from '~/types/auth'
 
 export const useAuthStore = defineStore(
@@ -20,6 +21,15 @@ export const useAuthStore = defineStore(
     const isAdmin = computed(() => {
       return user.value?.role === 'admin'
     })
+
+    async function updateProfile(payload: UpdateProfilePayload) {
+      const response = await api.request<UpdateProfilePayload, UpdateProfilePayload>('/users/me', {
+        method: 'PATCH',
+        body: payload,
+      })
+
+      return response
+    }
 
     async function login(payload: LoginPayload) {
       const response = await api.request<LoginResponse, LoginPayload>('/auth/login', {
@@ -110,6 +120,7 @@ export const useAuthStore = defineStore(
       isAuthenticated,
       isAdmin,
       login,
+      updateProfile,
       loginViaTelegram,
       fetchMe,
       register,

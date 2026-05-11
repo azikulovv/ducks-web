@@ -21,7 +21,6 @@ const { uploadImage, isUploading } = useUploadApi()
 const { validate, errors } = useZodValidation(profileSchema)
 
 const isSaving = ref(false)
-const errorMessage = ref('')
 
 const form = reactive({
   name: '',
@@ -33,21 +32,16 @@ const form = reactive({
 })
 
 const loadProfile = async () => {
-  try {
-    const me = await notify.promise(authStore.fetchMe(), {
-      loading: 'Загрузка профиля...',
-      success: 'Профиль загружен',
-      error: 'Не удалось загрузить профиль',
-    })
+  const me = await notify.promise(authStore.fetchMe(), {
+    loading: 'Загрузка профиля...',
+    success: 'Профиль загружен',
+    error: 'Не удалось загрузить профиль',
+  })
 
-    form.name = me?.name ?? ''
-    form.phone = me?.phone ?? ''
-    form.avatar = me?.avatarUrl ?? ''
-    form.username = me?.username ?? ''
-  } catch (e: any) {
-    console.error(e)
-    errorMessage.value = 'Не удалось загрузить профиль'
-  }
+  form.name = me?.name ?? ''
+  form.phone = me?.phone ?? ''
+  form.avatar = me?.avatarUrl ?? ''
+  form.username = me?.username ?? ''
 }
 
 onMounted(loadProfile)
@@ -60,10 +54,9 @@ const saveProfile = async () => {
   }
 
   let imageUrl = form.avatar
-  let imageHash
+  let imageHash = ''
 
   try {
-    errorMessage.value = ''
     isSaving.value = true
 
     if (form.file) {
@@ -73,21 +66,18 @@ const saveProfile = async () => {
       imageHash = uploaded.hash
     }
 
-    // await api.updateEvent(
-    //   { id },
-    //   {
-    //     address: form.address,
-    //     gameType: form.gameType,
-    //     startsAt: form.startsAt,
-    //     participantLimit: form.participantLimit,
-
-    //     imageUrl,
-    //     imageHash,
-    //   },
-    // )
+    await authStore.updateProfile({
+      name: form.name,
+      username: form.username,
+      phone: form.phone,
+      avatarUrl: imageUrl,
+      avatarHash: imageHash,
+    })
+    notify.success('Профиль сохранен')
+    await authStore.fetchMe()
   } catch (e: any) {
     console.error(e)
-    errorMessage.value = 'Не удалось сохранить профиль'
+    notify.error('Не удалось сохранить профиль')
   } finally {
     isSaving.value = false
   }
@@ -137,13 +127,6 @@ const saveProfile = async () => {
       :icon="Phone"
       :error="errors.phone"
     />
-
-    <div
-      v-if="errorMessage"
-      class="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400"
-    >
-      {{ errorMessage }}
-    </div>
 
     <BaseButton
       class="w-full"

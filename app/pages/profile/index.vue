@@ -35,7 +35,13 @@ onMounted(async () => {
 
   <div class="p-6 space-y-8">
     <div class="rounded-2xl border border-white/5 bg-(--secondary)/20 p-8 text-center">
+      <NuxtImg
+        v-if="user?.avatarUrl"
+        class="mx-auto flex size-24 items-center justify-center rounded-3xl border border-(--logo-bg)/30 bg-black select-none"
+        :src="renderPicture(user.avatarUrl)"
+      />
       <div
+        v-else
         class="mx-auto flex size-24 items-center justify-center rounded-3xl border border-(--logo-bg)/30 bg-black text-4xl font-black"
       >
         {{ getInitial(user?.name) }}
