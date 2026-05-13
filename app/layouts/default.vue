@@ -7,11 +7,11 @@ import { Calendar, Info, List, Star, User } from '@lucide/vue'
     <slot />
 
     <LayoutNavbar>
-      <LayoutNavbarButton path="/events">
+      <LayoutNavbarButton path="/">
         <template #icon>
           <Calendar />
         </template>
-        <template #default> Афиша </template>
+        <template #default> Главная </template>
       </LayoutNavbarButton>
 
       <LayoutNavbarButton path="/rating">

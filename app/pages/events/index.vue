@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useEventsApi } from '~/api/events.api'
 import { categories } from '~/constants/categories'
-import type { Event } from '~/types/events'
+import type { Event } from '~/types/event'
 
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
 import BaseSelect from '~/components/ui/BaseSelect.vue'
+import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
 
 definePageMeta({
   middleware: 'auth',
@@ -38,6 +39,10 @@ watch(selectedCategory, fetchEvents, { immediate: true })
 <template>
   <div class="text-white pb-32">
     <BaseHeader>
+      <template #left>
+        <HeaderBackButton />
+      </template>
+
       <template #default>
         <HeaderTitle title="Афиша" />
       </template>
@@ -48,7 +53,7 @@ watch(selectedCategory, fetchEvents, { immediate: true })
 
       <section>
         <h3 class="text-xs font-bold text-gray-500 uppercase tracking-[0.2em] mb-4 ml-2">
-          Ближайшие события
+          Все события
         </h3>
 
         <div v-if="isLoading" class="space-y-3">

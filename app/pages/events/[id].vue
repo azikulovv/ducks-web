@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useEventsApi } from '~/api/events.api'
 import { useEventRegistrationApi } from '~/api/event-registration.api'
-import type { Event } from '~/types/events'
+import type { Event } from '~/types/event'
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'

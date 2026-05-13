@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Calendar } from '@lucide/vue'
 import { gameTypeColors } from '~/constants/categories'
-import type { Event } from '~/types/events'
+import type { Event } from '~/types/event'
 
 const props = defineProps<{
   event: Event

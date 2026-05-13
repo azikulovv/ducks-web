@@ -6,7 +6,7 @@ import HeaderMenuItem from '~/components/layout/header/HeaderMenuItem.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
 import BaseSelect from '~/components/ui/BaseSelect.vue'
 import { categories, statuses } from '~/constants/categories'
-import type { Event } from '~/types/events'
+import type { Event } from '~/types/event'
 
 definePageMeta({
   layout: 'admin',

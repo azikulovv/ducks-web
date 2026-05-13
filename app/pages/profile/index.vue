@@ -12,7 +12,7 @@ const router = useRouter()
 const menu = [
   { label: 'Идеи и предложения', path: '/profile/feedback' },
   { label: 'Мои записи', path: '/profile/events' },
-  { label: 'О клубе', path: '/profile/about' },
+  { label: 'О клубе', path: '/about' },
   { label: 'Настройки профиля', path: '/profile/settings' },
 ]
 
