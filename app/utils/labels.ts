@@ -1,8 +1,10 @@
+import { EventGameStatus } from '~/types/event'
+
 export const getGameLabel = (type: string) => {
   return (
     {
       poker: 'Покер',
-      billiards: 'Бильярд',
+      pool: 'Бильярд',
       darts: 'Дартс',
       quiz: 'Квиз',
       mafia: 'Мафия',
@@ -13,10 +15,10 @@ export const getGameLabel = (type: string) => {
 export const getStatusLabel = (type: string) => {
   return (
     {
-      draft: 'Черновик',
-      published: 'Доступен',
-      cancalled: 'Отменен',
-      completed: 'Завершен',
+      [EventGameStatus.DRAFT]: 'Черновик',
+      [EventGameStatus.PUBLISHED]: 'Доступен',
+      [EventGameStatus.CANCELLED]: 'Отменен',
+      [EventGameStatus.COMPLETED]: 'Завершен',
     }[type] ?? type
   )
 }

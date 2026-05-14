@@ -40,7 +40,7 @@ const statusConfig = computed(() => {
     <div class="min-w-0 flex-1">
       <div class="flex items-start justify-between gap-3">
         <h4 class="line-clamp-2 text-sm font-bold leading-5 text-white">
-          {{ event.address }}
+          {{ event.title }}
         </h4>
 
         <span

@@ -26,13 +26,14 @@ export type Event = {
   id: string
   imageUrl: string
   imageHash: string
+  title: string
   city: string
   address: string
   gameType: EventGameType
   gameRules: string
   features: string
   startsAt: string
-  endsAt: null
+  endsAt: string
   location: string
   participantLimit: number
   pointsForParticipation: number
@@ -50,6 +51,7 @@ export type EventResponse = Event
 export type UpdateEventParams = { id: Event['id'] }
 
 export type UpdateEventPayload = {
+  title: Event['title']
   city: Event['city']
   gameRules: Event['gameRules']
   features: Event['features']
@@ -62,6 +64,7 @@ export type UpdateEventPayload = {
 }
 
 export type CreateEventPayload = {
+  title: Event['title']
   city: Event['city']
   gameRules: Event['gameRules']
   features: Event['features']

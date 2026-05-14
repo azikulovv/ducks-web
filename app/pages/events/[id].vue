@@ -102,7 +102,7 @@ onMounted(async () => {
 
       <!-- TITLE -->
       <div class="rounded-2xl border border-white/5 bg-(--secondary)/20 p-5 space-y-3">
-        <h1 class="text-lg font-black uppercase tracking-tight">Название мероприятия</h1>
+        <h1 class="text-lg font-black uppercase tracking-tight">{{ event.title }}</h1>
 
         <p class="text-white font-semibold">
           {{ event.address }}

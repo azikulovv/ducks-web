@@ -1,14 +1,40 @@
 <script setup lang="ts">
+import { useEventsApi } from '~/api/events.api'
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
-import type { Event } from '~/types/event'
+import { EventGameStatus, type Event } from '~/types/event'
 
 definePageMeta({
   layout: 'default',
   middleware: 'auth',
 })
 
+const api = useEventsApi()
+
 const topEvents = ref<Event[]>([])
+
+const loadTopEvents = async () => {
+  const { data: events } = await api.getEvents({ status: EventGameStatus.PUBLISHED })
+
+  if (events && !events?.length) {
+    topEvents.value = []
+    return
+  }
+
+  const nearestEvents = [...events]
+    .sort((a, b) => {
+      return new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime()
+    })
+    .slice(0, 2)
+
+  console.log(nearestEvents)
+
+  topEvents.value = nearestEvents
+}
+
+onMounted(() => {
+  loadTopEvents()
+})
 </script>
 
 <template>
@@ -30,7 +56,7 @@ const topEvents = ref<Event[]>([])
         <NuxtLink to="/events" class="text-[11px] font-medium text-(--accent)"> Все </NuxtLink>
       </div>
 
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid gap-3" :style="{ gridTemplateColumns: `repeat(${topEvents.length}, 1fr)` }">
         <HomeEventCard v-for="e in topEvents" :key="e.id" :event="e" />
       </div>
     </section>

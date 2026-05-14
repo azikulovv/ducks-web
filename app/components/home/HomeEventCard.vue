@@ -62,7 +62,7 @@ const styles = computed(() => {
 
 <template>
   <NuxtLink
-    to="/events"
+    :to="`/events/${props.event.id}`"
     class="relative overflow-hidden rounded-2xl border bg-white/3 p-4 backdrop-blur-xl transition active:scale-[0.98]"
     :class="styles.ring"
   >
@@ -85,7 +85,7 @@ const styles = computed(() => {
       </div>
 
       <p class="mt-3 text-sm font-semibold tracking-[-0.01em]" :class="styles.text">
-        {{ event.address }}
+        {{ event.title }}
       </p>
 
       <p class="text-[11px] text-gray-400">

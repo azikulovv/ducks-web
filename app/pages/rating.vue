@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+import { EventGameType } from '~/types/event'
 
 definePageMeta({
   middleware: 'auth',
 })
 
-const activeTab = ref('poker')
+const activeTab = ref(EventGameType.POKER)
 
 const tabs = [
-  { label: 'Покер', value: 'poker' },
-  { label: 'Дартс', value: 'darts' },
-  { label: 'Бильярд', value: 'billiards' },
+  { label: 'Покер', value: EventGameType.POKER },
+  { label: 'Дартс', value: EventGameType.DARTS },
+  { label: 'Бильярд', value: EventGameType.POOL },
 ]
 
 const { rating, isLoading, error } = useRatingQuery(activeTab)

@@ -10,6 +10,7 @@ import BaseSelect from '~/components/ui/BaseSelect.vue'
 import ImageUpload from '~/components/ui/ImageUpload.vue'
 
 import { categories } from '~/constants/categories'
+import type { EventGameType } from '~/types/event'
 
 definePageMeta({
   layout: 'empty',
@@ -25,6 +26,7 @@ const isSaving = ref(false)
 const errorMessage = ref('')
 
 const form = reactive({
+  title: '',
   city: '',
   gameRules: '',
   features: '',
@@ -63,11 +65,12 @@ const createEvent = async () => {
     }
 
     await api.createEvent({
+      title: form.title,
       city: form.city,
       features: form.features,
       gameRules: form.gameRules,
       address: form.address,
-      gameType: form.gameType,
+      gameType: form.gameType as EventGameType,
       startsAt: form.startsAt,
       participantLimit: form.participantLimit,
       imageUrl,
@@ -82,19 +85,6 @@ const createEvent = async () => {
   } finally {
     isSaving.value = false
   }
-}
-
-/**
- * File preview
- */
-const onFileChange = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  const file = target.files?.[0]
-
-  if (!file) return
-
-  form.file = file
-  form.imageUrl = URL.createObjectURL(file)
 }
 </script>
 
@@ -114,6 +104,14 @@ const onFileChange = (e: Event) => {
       v-model="form.imageUrl"
       :loading="isUploading"
       @change="(file) => (form.file = file)"
+    />
+
+    <BaseInput
+      v-model="form.title"
+      type="text"
+      label="Название"
+      placeholder="Название мероприятия"
+      :icon="Map"
     />
 
     <BaseSelect v-model="form.gameType" label="Категория" :options="categories" />

@@ -10,6 +10,7 @@ import BaseSelect from '~/components/ui/BaseSelect.vue'
 import ImageUpload from '~/components/ui/ImageUpload.vue'
 
 import { categories } from '~/constants/categories'
+import { EventGameType, type Event } from '~/types/event'
 
 definePageMeta({
   layout: 'empty',
@@ -29,6 +30,7 @@ const isSaving = ref(false)
 const errorMessage = ref('')
 
 const form = reactive({
+  title: '',
   city: '',
   gameRules: '',
   features: '',
@@ -47,6 +49,7 @@ const loadEvent = async () => {
   try {
     const event = await api.getEvent(id)
 
+    form.title = event.title ?? ''
     form.city = event.city ?? ''
     form.features = event.features ?? ''
     form.gameRules = event.gameRules ?? ''
@@ -91,11 +94,12 @@ const updateEvent = async () => {
     await api.updateEvent(
       { id },
       {
+        title: form.title,
         city: form.city,
         features: form.features,
         gameRules: form.gameRules,
         address: form.address,
-        gameType: form.gameType,
+        gameType: form.gameType as EventGameType,
         startsAt: form.startsAt,
         participantLimit: form.participantLimit,
 
@@ -138,6 +142,14 @@ const updateEvent = async () => {
     />
 
     <BaseSelect v-model="form.gameType" label="Категория" :options="categories" />
+
+    <BaseInput
+      v-model="form.title"
+      type="text"
+      label="Название"
+      placeholder="Название мероприятия"
+      :icon="Map"
+    />
 
     <BaseInput v-model="form.city" type="text" label="Город" placeholder="Москва" :icon="Map" />
 
