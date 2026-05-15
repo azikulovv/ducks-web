@@ -2,6 +2,7 @@
 import { useEventsApi } from '~/api/events.api'
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+import Information from '~/components/ui/Information.vue'
 import { EventGameStatus, type Event } from '~/types/event'
 
 definePageMeta({
@@ -54,6 +55,8 @@ onMounted(() => {
     </section>
 
     <HomeNavigation />
-    <HomeFooter class="mt-2" />
+    <Information class="mt-2">
+      Все игры клуба DUCK’S не предполагают материального вознаграждения. Только рейтинг.
+    </Information>
   </main>
 </template>

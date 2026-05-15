@@ -4,12 +4,15 @@ import { ChevronDown, GraduationCap } from '@lucide/vue'
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
+import Information from '~/components/ui/Information.vue'
 
 type Step = {
   key: string
   title: string
   desc: string
 }
+
+const { impact } = useTelegramHaptics()
 
 const opened = ref<string | null>(null)
 
@@ -39,6 +42,11 @@ const steps: Step[] = [
     desc: 'Почти профессиональный уровень. Углублённая стратегия, эксплуатация оппонентов, GTO основы, работа с анализом раздач и софтом. Подготовка к профессиональной игре.',
   },
 ]
+
+const goToEvents = () => {
+  impact('light')
+  navigateTo('/events')
+}
 </script>
 
 <template>
@@ -130,6 +138,10 @@ const steps: Step[] = [
     </div>
 
     <!-- CTA -->
-    <BaseButton class="mt-6 w-full"> Записаться на курс </BaseButton>
+    <BaseButton class="mt-6 w-full" @click="goToEvents"> Смотреть события </BaseButton>
+
+    <Information class="mt-4">
+      Информация о ближайших обучениях будет публиковаться в афише.
+    </Information>
   </div>
 </template>
