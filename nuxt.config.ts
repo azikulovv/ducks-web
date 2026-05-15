@@ -42,7 +42,7 @@ export default defineNuxtConfig({
       background_color: '#0a0c12',
       display: 'standalone',
       orientation: 'portrait',
-      start_url: '/?source=pwa',
+      start_url: '/login',
       scope: '/',
 
       icons: [
