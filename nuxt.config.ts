@@ -28,6 +28,16 @@ export default defineNuxtConfig({
           src: 'https://telegram.org/js/telegram-web-app.js',
         },
       ],
+      meta: [
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        {
+          name: 'viewport',
+          content:
+            'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover',
+        },
+      ],
+      link: [{ rel: 'apple-touch-icon', href: '/192.png' }],
     },
   },
 

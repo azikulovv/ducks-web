@@ -7,6 +7,7 @@ import Telegram from '~/components/icons/Telegram.vue'
 
 definePageMeta({
   layout: false,
+  middleware: 'guest',
 })
 
 const formData = ref<LoginSchema>({
