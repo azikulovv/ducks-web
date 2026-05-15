@@ -36,12 +36,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <BaseHeader>
-    <template #default>
-      <HeaderTitle title="Duck's Club" />
-    </template>
-  </BaseHeader>
-
   <main class="relative z-10 space-y-5 px-4 pb-6 pt-4">
     <HomeHero />
 
