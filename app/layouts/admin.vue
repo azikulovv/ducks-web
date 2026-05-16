@@ -3,7 +3,7 @@ import { Calendar, CalendarCheck, CornerDownLeft, MessageSquare } from '@lucide/
 </script>
 
 <template>
-  <div class="bg-(--bg) min-h-screen text-white pb-20">
+  <div class="bg-(--bg) min-h-screen text-white pb-20" :style="{ paddingTop: 'var(--safe-top)' }">
     <slot />
 
     <LayoutNavbar>
