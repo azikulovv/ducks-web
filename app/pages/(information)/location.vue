@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ChevronDown } from '@lucide/vue'
+
 import BaseHeader from '~/components/layout/header/BaseHeader.vue'
 import HeaderBackButton from '~/components/layout/header/HeaderBackButton.vue'
 import HeaderTitle from '~/components/layout/header/HeaderTitle.vue'
@@ -9,6 +11,13 @@ definePageMeta({
 })
 
 const phone = '+70000000000'
+const metroRouteImage = '/assets/images/location-metro.jpg'
+const isMetroRouteOpen = ref(false)
+const isMetroRouteImageMissing = ref(false)
+
+const toggleMetroRoute = () => {
+  isMetroRouteOpen.value = !isMetroRouteOpen.value
+}
 </script>
 
 <template>
@@ -76,9 +85,53 @@ const phone = '+70000000000'
         Идите по проспекту Мира в сторону центра.
       </p>
 
-      <div class="mt-4 rounded-2xl bg-white/5 p-3 text-sm text-gray-300">
-        ⏱ Пешком около 10 минут
-      </div>
+      <button
+        class="mt-4 flex w-full items-center gap-3 rounded-2xl bg-white/5 p-3 text-left text-sm text-gray-300 transition-colors hover:bg-white/10"
+        type="button"
+        :aria-expanded="isMetroRouteOpen"
+        @click="toggleMetroRoute"
+      >
+        <span class="flex-1">⏱ Пешком около 10 минут</span>
+
+        <ChevronDown
+          :size="18"
+          class="shrink-0 text-gray-500 transition-transform duration-300"
+          :class="{ 'rotate-180 text-(--logo-bg)': isMetroRouteOpen }"
+        />
+      </button>
+
+      <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0 max-h-0"
+        enter-to-class="opacity-100 max-h-[640px]"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100 max-h-[640px]"
+        leave-to-class="opacity-0 max-h-0"
+      >
+        <div v-if="isMetroRouteOpen" class="overflow-hidden pt-4">
+          <div class="overflow-hidden rounded-2xl border border-white/5 bg-white/5">
+            <img
+              v-if="!isMetroRouteImageMissing"
+              :src="metroRouteImage"
+              alt="Маршрут от метро Алексеевская до DUCK’S GameClub"
+              class="aspect-[4/3] w-full object-cover"
+              loading="lazy"
+              @error="isMetroRouteImageMissing = true"
+            />
+
+            <div
+              v-else
+              class="flex aspect-[4/3] items-center justify-center px-5 text-center text-sm leading-relaxed text-gray-400"
+            >
+              Добавьте фото маршрута в public/assets/images/location-metro.jpg
+            </div>
+          </div>
+
+          <p class="mt-3 text-center text-xs font-semibold text-(--logo-bg)">
+            сделай скрин, чтоб не потеряться
+          </p>
+        </div>
+      </Transition>
     </div>
 
     <!-- TRANSPORT -->
