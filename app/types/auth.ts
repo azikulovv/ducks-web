@@ -32,6 +32,7 @@ export type RegisterPayload = {
   email: string
   password: string
   initData?: string
+  promoCode?: string
 }
 
 export type RegisterResponse = {

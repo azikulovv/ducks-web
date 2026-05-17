@@ -7,6 +7,7 @@ import type {
   LoginViaTelegramPayload,
   UpdateProfilePayload,
 } from '~/types/auth'
+import { clearSavedPromoCode, getSavedPromoCode } from '~/utils/promoCode'
 
 export const useAuthStore = defineStore(
   'auth',
@@ -91,17 +92,19 @@ export const useAuthStore = defineStore(
     }
 
     async function register(payload: RegisterPayload) {
-      const initData = window.Telegram.WebApp.initData
+      const initData = window.Telegram?.WebApp?.initData
+      const promoCode = getSavedPromoCode()
 
       const response = await api.request<RegisterResponse, RegisterPayload>('/auth/register', {
         method: 'POST',
-        body: { ...payload, initData },
+        body: { ...payload, initData, ...(promoCode ? { promoCode } : {}) },
         auth: false,
       })
 
       token.value = response.token
 
       await fetchMe()
+      clearSavedPromoCode()
 
       return response
     }
