@@ -5,7 +5,13 @@ export function useEventRegistrationApi(eventId: Ref<string>) {
   const isRegistered = ref(false)
   const registrationStatus = ref<string | null>(null)
 
-  const registeredStatuses = new Set(['ACTIVE', 'REGISTERED', 'WAITING', 'WAITLIST', 'WAITING_LIST'])
+  const registeredStatuses = new Set([
+    'ACTIVE',
+    'PARTICIPANT',
+    'WAITING',
+    'WAITLIST',
+    'WAITING_LIST',
+  ])
 
   const fetchStatus = async () => {
     const res = await api.request<{ status?: string }>(`/events/${eventId.value}/registration`)
